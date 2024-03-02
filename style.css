@@ -1,0 +1,25 @@
+body {
+    font-family: Liberation, serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+h1 {
+    font-family: Lberation, sans-serif;
+    color: #0056b3;
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 60px;
+}
+
+tt {
+    font-family: Menlo, monospace;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}

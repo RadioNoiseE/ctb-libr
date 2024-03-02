@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Welcome, librarian</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="container">
+            <h1>Hello, this the librarian's page served by <tt>lighttpd</tt> running on Alpine Linux in Docker!</h1>
+        </div>
+        <form action="upload.php" method="post" enctype="multipart/form-data" style="text-align:center">
+            Select image to upload:
+            <input type="file" name="image[]" id="image" multiple>
+            <input type="submit" value="Upload Image" name="submit">
+        </form>
+        <?php
+        $images = glob("uploads/*.{jpg,jpeg,png,gif}", GLOB_BRACE);
+        foreach ($images as $image) {
+        echo "<a href='annotate-image.php?image=" . urlencode($image) . "'>Annotate " . htmlspecialchars(basename($image)) . "</a><br>";
+        }
+        ?>
+    </body>
+</html>
