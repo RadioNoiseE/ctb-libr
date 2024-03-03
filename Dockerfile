@@ -5,16 +5,17 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/re
 RUN apk update
 
 RUN apk add --no-cache lighttpd \
-    php7-common php7-iconv php7-json php7-gd php7-curl \ 
-    php7-xml php7-mysqli php7-imap php7-cgi fcgi \
-    php7-pdo php7-pdo_mysql php7-soap php7-xmlrpc php7-posix \
-    php7-mcrypt php7-gettext php7-ldap php7-ctype php7-dom
+    php83 php83-cgi php83-common
 
 COPY lighttpd.conf /etc/lighttpd/lighttpd.conf
 
 RUN mkdir -p /var/www/localhost/htdocs
 RUN mkdir /var/www/localhost/htdocs/upload
 RUN mkdir /var/www/localhost/htdocs/annotations
+
+RUN echo "cgi.fix_pathinfo = 1" >> /etc/php.ini
+RUN echo "file_uploads = On" >> /etc/php.ini
+RUN echo "post_max_size = 100M" >> /etc/php.ini
 
 COPY index.html /var/www/localhost/htdocs/index.html
 COPY style.css /var/www/localhost/htdocs/style.css
