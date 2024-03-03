@@ -1,64 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Welcome, reader</title>
-        <link rel="stylesheet" href="style.css">
-        <style>
-         image-container {
-             position: relative;
-             display: inline-block;
-         }
-         .annotation {
-             position: absolute;
-             color: red;
-             font-size: 20px;
-             font-weight: bold;
-             pointer-events: none;
-         }
-         img {
-             max-width: 100%;
-             height: auto;
-         }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1>Hello, this is the reader's page served by <tt>lighttpd</tt> running on Alpine Linux in Docker!</h1>
-        </div>
-        <?php
-        $images = glob("uploads/*.{jpg,jpeg,png,gif}", GLOB_BRACE);
-        foreach ($images as $image) {
-            echo "<a href='annotate-image.php?image=" . urlencode($image) . "'>Annotate " . htmlspecialchars(basename($image)) . "</a><br>";
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome, reader</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        #image-container {
+            position: relative;
+            display: inline-block;
         }
-        ?>
+        .annotation {
+            position: absolute;
+            color: red;
+            font-size: 20px;
+            font-weight: bold;
+            pointer-events: none;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Hello, this is the reader's page served by <tt>lighttpd</tt> running on Alpine Linux in Docker!</h1>
+    </div>
+    <?php
+        $imagePath = "uploads/";
+        $annotationPath = "annotations/";
 
-        <script>
-            const imageContainer = document.getElementById('image-container');
-            let count = 0;
+        $images = glob($imagePath . "*.{jpg,jpeg,png,gif}", GLOB_BRACE);
+        foreach ($images as $image) {
+            $imageName = basename($image);
 
-            function addAnnotation(event) {
-                // Calculate the position of the annotation
-                const rect = event.target.getBoundingClientRect();
-                const posX = event.clientX - rect.left;
-                const posY = event.clientY - rect.top;
-
-                // Create and position the annotation element
-                const annotation = document.createElement('div');
-                annotation.classList.add('annotation');
-                annotation.style.left = `${posX}px`;
-                annotation.style.top = `${posY}px`;
-                annotation.innerText = ++count; // Increment the count and display as the annotation text
-
-                // Append the annotation to the image container
-                imageContainer.appendChild(annotation);
-
-                // Prevent further event propagation
-                event.preventDefault();
-            }
-
-            // Add click event listener to the image container
-            document.getElementById('imageToAnnotate').addEventListener('click', addAnnotation);
-        </script>
-    </body>
+            echo "<div id='image-container'>";
+            echo "<img src='$image' id='imageToView_$imageName' alt='View Image'>";
+            echo "<script>";
+            echo "const imageContainer_$imageName = document.getElementById('image-container-$imageName');";
+            echo "const imageName_$imageName = '$image';";
+            echo "function loadAnnotations_$imageName() {";
+            echo "    const xhr = new XMLHttpRequest();";
+            echo "    xhr.open('GET', '$annotationPath" . urlencode($imageName) . ".json');";
+            echo "    xhr.onload = function() {";
+            echo "        if (xhr.status == 200) {";
+            echo "            const annotations = JSON.parse(xhr.responseText);";
+            echo "            applyAnnotations_$imageName(annotations);";
+            echo "        }";
+            echo "    };";
+            echo "    xhr.send();";
+            echo "}";
+            echo "function applyAnnotations_$imageName(annotations) {";
+            echo "    annotations.forEach(function(annotation) {";
+            echo "        const annotationDiv = document.createElement('div');";
+            echo "        annotationDiv.classList.add('annotation');";
+            echo "        annotationDiv.style.left = annotation.left;";
+            echo "        annotationDiv.style.top = annotation.top;";
+            echo "        annotationDiv.textContent = annotation.text;";
+            echo "        imageContainer_$imageName.appendChild(annotationDiv);";
+            echo "    });";
+            echo "}";
+            echo "window.onload = function() {";
+            echo "    loadAnnotations_$imageName();";
+            echo "};";
+            echo "</script>";
+            echo "</div>";
+        }
+    ?>
+</body>
 </html>

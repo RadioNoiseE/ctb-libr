@@ -14,12 +14,18 @@ COPY lighttpd.conf /etc/lighttpd/lighttpd.conf
 
 RUN mkdir -p /var/www/localhost/htdocs
 RUN mkdir /var/www/localhost/htdocs/upload
+RUN mkdir /var/www/localhost/htdocs/annotations
 
 COPY index.html /var/www/localhost/htdocs/index.html
 COPY style.css /var/www/localhost/htdocs/style.css
 
 COPY reader-entr.html /var/www/localhost/htdocs/reader-entr.html
 COPY librarian-entr.html /var/www/localhost/htdocs/librarian-entr.html
+
+COPY annotate-image.php /var/www/localhost/htdocs/annotate-image.php
+COPY save-annotations.php /var/www/localhost/htdocs/save-annotations.php
+
+COPY upload.php /var/www/localhost/htdocs/upload.php
 
 EXPOSE 80
 
