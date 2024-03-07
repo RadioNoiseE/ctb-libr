@@ -1,0 +1,6 @@
+#! /bin/sh
+
+exec doas rc-service docker start
+exec docker build -t alpine-lighttpd .
+exec docker run --name rne-lighttpd -p 8080:80 alpine-lighttpd &
+exec firefox http://localhost:8080/
