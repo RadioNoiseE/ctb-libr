@@ -22,12 +22,9 @@
     </style>
 </head>
 <body>
-    <?php
-        $image = $_GET['image'] ?? '';
-        if ($image) {
-            echo '<img src="'.htmlspecialchars($image).'" id="imageToAnnotate" style="max-width: 100%; height: auto;">';
-        }
-    ?>
+    <div id="image-container">
+        <img src="libr.jpg" id="imageToAnnotate" alt="Annotatable Image">
+    </div>
     <script>
         const imageContainer = document.getElementById('image-container');
         let count = 0;

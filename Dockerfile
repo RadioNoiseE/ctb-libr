@@ -10,8 +10,6 @@ RUN apk add --no-cache lighttpd \
 COPY lighttpd.conf /etc/lighttpd/lighttpd.conf
 
 RUN mkdir -p /var/www/localhost/htdocs
-RUN mkdir /var/www/localhost/htdocs/upload
-RUN mkdir /var/www/localhost/htdocs/annotations
 
 RUN echo "cgi.fix_pathinfo = 1" >> /etc/php.ini
 RUN echo "file_uploads = On" >> /etc/php.ini
@@ -20,6 +18,9 @@ RUN echo "post_max_size = 100M" >> /etc/php.ini
 COPY index.html /var/www/localhost/htdocs/index.html
 COPY style.css /var/www/localhost/htdocs/style.css
 
+COPY libr.jpg /var/www/localhost/htdocs/libr.jpg
+COPY libr-a.jpg var/www/localhost/htdocs/libr-a.jpg
+
 COPY reader-entr.html /var/www/localhost/htdocs/reader-entr.html
 COPY librarian-entr.html /var/www/localhost/htdocs/librarian-entr.html
 
@@ -27,6 +28,7 @@ COPY annotate-image.php /var/www/localhost/htdocs/annotate-image.php
 COPY save-annotations.php /var/www/localhost/htdocs/save-annotations.php
 
 COPY upload.php /var/www/localhost/htdocs/upload.php
+COPY reservation.js /var/www/localhost/htdocs/reservation.js
 
 EXPOSE 80
 

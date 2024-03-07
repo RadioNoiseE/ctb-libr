@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Welcome, reader</title>
     <link rel="stylesheet" href="style.css">
+    <!--
     <style>
         #image-container {
             position: relative;
@@ -21,11 +22,14 @@
             height: auto;
         }
     </style>
+    -->
+    <script src="reservation.js"></script>
 </head>
 <body>
     <div class="container">
         <h1>Hello, this is the reader's page served by <tt>lighttpd</tt> running on Alpine Linux in Docker!</h1>
     </div>
+    <!--
     <?php
         $imagePath = "uploads/";
         $annotationPath = "annotations/";
@@ -67,5 +71,23 @@
             echo "</div>";
         }
     ?>
+    -->
+    <img src="libr-a.jpg" alt="Annotated Image" class="center">
+
+    <label for="seatNumber">输入座位序号（1-10）:</label>
+    <input type="number" id="seatNumber" min="1" max="10">
+    <button onclick="checkSeat()">查询座位</button>
+
+    <div id="seatStatus"></div>
+
+    <div id="reservationForm" style="display:none;">
+        <h3>座位预约</h3>
+        <label>开始时间：</label>
+        <input type="time" id="startTime">
+        <label>结束时间：</label>
+        <input type="time" id="endTime">
+        <button onclick="reserveSeat()">预约座位</button>
+    </div>
+
 </body>
 </html>
